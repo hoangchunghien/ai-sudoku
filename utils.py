@@ -39,3 +39,23 @@ def grid_values(grid):
     """
     assert len(grid) == 81, "Input grid must be a string of length 81 (9x9)"
     return dict((k, v if v != '.' else '123456789') for k, v in zip(boxes, grid))
+
+def eliminate(values):
+    """Eliminate values from peers of each box with a single value.
+
+    Go through all the boxes, and whenever there is a box with a single value,
+    eliminate this value from the set of values of all its peers.
+
+    Args:
+        values: Sudoku in dictionary form.
+    Returns:
+        Resulting Sudoku in dictionary form after eliminating values.
+    """
+    for k in values.keys():
+        digit = values[k]
+        if len(digit) > 1:
+            continue
+
+        for peer in peers[k]:
+            values[peer] = values[peer].replace(digit, '')
+    return values
