@@ -1,5 +1,40 @@
 from utils import *
 
+def naked_twins(values):
+    """Eliminate values using the naked twins strategy.
+
+    Parameters
+    ----------
+    values(dict)
+        a dictionary of the form {'box_name': '123456789', ...}
+
+    Returns
+    -------
+    dict
+        The values dictionary with the naked twins eliminated from peers
+    """
+    twins = []  # e.g [('13', [units to eliminate...]), ...]
+    for u in unitlist:
+        twinsable = dict((k, values[k]) for k in u if len(values[k]) == 2)
+        value_counters = dict((values[k], 0) for k in twinsable.keys())
+        for k in twinsable.keys():
+            value_counters[values[k]] += 1
+
+        for v in value_counters.keys():
+            if value_counters[v] != 2:
+                continue
+            pair = [k for k in twinsable.keys() if twinsable[k] == v]
+            if len(pair) > 0:
+                twins.append((v, [k for k in u if k not in pair]))
+    
+    # eliminate naked twins
+    for v, u in twins:
+        for digit in v:
+            for k in u:
+                values[k] = values[k].replace(digit, '')
+    return values
+
+
 def eliminate(values):
     """Eliminate values from peers of each box with a single value.
 
