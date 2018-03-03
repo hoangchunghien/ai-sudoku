@@ -115,3 +115,22 @@ def search(values):
         attempt = search(new_board)
         if attempt:
             return attempt
+
+def solve(grid):
+    """Find the solution to a Sudoku puzzle using search and constraint propagation
+
+    Parameters
+    ----------
+    grid(string)
+        a string representing a sudoku grid.
+        
+        Ex. '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
+
+    Returns
+    -------
+    dict or False
+        The dictionary representation of the final sudoku grid or False if no solution exists.
+    """
+    values = grid2values(grid)
+    values = search(values)
+    return values
