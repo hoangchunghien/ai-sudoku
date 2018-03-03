@@ -31,7 +31,7 @@ def naked_twins(values):
     for v, u in twins:
         for digit in v:
             for k in u:
-                values[k] = values[k].replace(digit, '')
+                values = assign_value(values, k, values[k].replace(digit, ''))
     return values
 
 
@@ -52,7 +52,7 @@ def eliminate(values):
             continue
 
         for peer in peers[k]:
-            values[peer] = values[peer].replace(digit, '')
+            values = assign_value(values, peer, values[peer].replace(digit, ''))
     return values
 
 def only_choice(values):
@@ -68,7 +68,7 @@ def only_choice(values):
         for digit in '123456789':
             dplaces = [box for box in unit if digit in values[box]]
             if len(dplaces) == 1:
-                values[dplaces[0]] = digit
+                values = assign_value(values, dplaces[0], digit)
     return values
 
 def reduce_puzzle(values):
@@ -134,3 +134,18 @@ def solve(grid):
     values = grid2values(grid)
     values = search(values)
     return values
+
+if __name__ == "__main__":
+    diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
+    display(grid2values(diag_sudoku_grid))
+    result = solve(diag_sudoku_grid)
+    display(result)
+
+    try:
+        import PySudoku
+        PySudoku.play(grid2values(diag_sudoku_grid), result, history)
+
+    except SystemExit:
+        pass
+    except:
+        print('We could not visualize your board due to a pygame issue. Not a problem! It is not a requirement.')
